@@ -59,6 +59,117 @@
             </div>
         </div>
 
+        <!-- Settings Screen -->
+        <div x-show="screen === 'settings'"
+             x-transition:enter="slide-in"
+             x-transition:leave="slide-out"
+             class="screen settings-screen">
+
+            <div class="settings-container">
+                <!-- Left Panel: Categories -->
+                <div class="settings-left-panel">
+                    <h2 class="settings-title">SETTINGS</h2>
+                    <div class="settings-categories">
+                        <button class="settings-category"
+                                :class="{ 'selected': selectedSettingCategory === 0 }"
+                                @click="selectedSettingCategory = 0"
+                                @mouseenter="selectedSettingCategory = 0">
+                            <span>Display</span>
+                        </button>
+                        <button class="settings-category"
+                                :class="{ 'selected': selectedSettingCategory === 1 }"
+                                @click="selectedSettingCategory = 1"
+                                @mouseenter="selectedSettingCategory = 1">
+                            <span>Audio</span>
+                        </button>
+                        <button class="settings-category"
+                                :class="{ 'selected': selectedSettingCategory === 2 }"
+                                @click="selectedSettingCategory = 2"
+                                @mouseenter="selectedSettingCategory = 2">
+                            <span>Controls</span>
+                        </button>
+                        <button class="settings-category"
+                                :class="{ 'selected': selectedSettingCategory === 3 }"
+                                @click="selectedSettingCategory = 3"
+                                @mouseenter="selectedSettingCategory = 3">
+                            <span>About</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Right Panel: Settings Options -->
+                <div class="settings-right-panel">
+                    <!-- Display Settings -->
+                    <div x-show="selectedSettingCategory === 0" class="settings-group">
+                        <h3 class="settings-group-title">Display</h3>
+                        <div class="setting-item">
+                            <span class="setting-label">Fullscreen</span>
+                            <button class="game-button" @click="toggleFullscreen()">Toggle</button>
+                        </div>
+                        <div class="setting-item">
+                            <span class="setting-label">Screen Resolution</span>
+                            <span class="setting-value">Auto</span>
+                        </div>
+                        <div class="setting-item">
+                            <span class="setting-label">Graphics Quality</span>
+                            <span class="setting-value">High</span>
+                        </div>
+                    </div>
+
+                    <!-- Audio Settings -->
+                    <div x-show="selectedSettingCategory === 1" class="settings-group">
+                        <h3 class="settings-group-title">Audio</h3>
+                        <div class="setting-item">
+                            <span class="setting-label">Master Volume</span>
+                            <span class="setting-value">100%</span>
+                        </div>
+                        <div class="setting-item">
+                            <span class="setting-label">Music Volume</span>
+                            <span class="setting-value">80%</span>
+                        </div>
+                        <div class="setting-item">
+                            <span class="setting-label">Sound Effects</span>
+                            <span class="setting-value">100%</span>
+                        </div>
+                    </div>
+
+                    <!-- Controls Settings -->
+                    <div x-show="selectedSettingCategory === 2" class="settings-group">
+                        <h3 class="settings-group-title">Controls</h3>
+                        <div class="setting-item">
+                            <span class="setting-label">Navigation</span>
+                            <span class="setting-value">Arrow Keys</span>
+                        </div>
+                        <div class="setting-item">
+                            <span class="setting-label">Select</span>
+                            <span class="setting-value">Enter</span>
+                        </div>
+                        <div class="setting-item">
+                            <span class="setting-label">Back</span>
+                            <span class="setting-value">Escape</span>
+                        </div>
+                    </div>
+
+                    <!-- About -->
+                    <div x-show="selectedSettingCategory === 3" class="settings-group">
+                        <h3 class="settings-group-title">About</h3>
+                        <div class="about-info">
+                            <p><strong>Business Operating System</strong></p>
+                            <p>Version 1.0.0</p>
+                            <p class="about-description">A 2000s Sony-inspired game UI with modern polish. Built with Express.js, Alpine.js, and pure CSS.</p>
+                            <p class="about-links">
+                                <a href="https://github.com/toestah/video_game_app" target="_blank" class="about-link">GitHub Repository</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="menu-buttons">
+                <button class="game-button secondary" @click="screen = 'main-menu'">Back to Menu</button>
+            </div>
+        </div>
+
         <!-- Main Menu Screen -->
         <div x-show="screen === 'main-menu'"
              x-transition:enter="slide-in"
@@ -149,6 +260,53 @@
             </div>
         </div>
 
+    </div>
+
+    <!-- Global Button Prompts -->
+    <div class="button-prompts-container" x-show="!dialog.show && !showNameInput">
+        <!-- Startup Screen Prompts -->
+        <template x-if="screen === 'startup' && showPressStart">
+            <div class="button-prompt">
+                <span class="key-hint">Any Key</span>
+                <span>Start</span>
+            </div>
+        </template>
+
+        <!-- Save Select Prompts -->
+        <template x-if="screen === 'save-select'">
+            <div style="display: flex; flex-direction: column; gap: 0.5rem; align-items: flex-end;">
+                <div class="button-prompt">
+                    <span class="key-hint">↑↓</span>
+                    <span>Navigate</span>
+                </div>
+                <div class="button-prompt">
+                    <span class="key-hint">Enter</span>
+                    <span>Select</span>
+                </div>
+                <div class="button-prompt">
+                    <span class="key-hint">Esc</span>
+                    <span>Back</span>
+                </div>
+            </div>
+        </template>
+
+        <!-- Main Menu Prompts -->
+        <template x-if="screen === 'main-menu'">
+            <div style="display: flex; flex-direction: column; gap: 0.5rem; align-items: flex-end;">
+                <div class="button-prompt">
+                    <span class="key-hint">↑↓</span>
+                    <span>Navigate</span>
+                </div>
+                <div class="button-prompt">
+                    <span class="key-hint">Enter</span>
+                    <span>Select</span>
+                </div>
+                <div class="button-prompt">
+                    <span class="key-hint">F11</span>
+                    <span>Fullscreen</span>
+                </div>
+            </div>
+        </template>
     </div>
 
     <script src="/js/storage.js"></script>

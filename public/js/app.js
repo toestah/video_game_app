@@ -16,6 +16,7 @@ function gameApp() {
 
     // Main menu
     selectedMenuIndex: 0,
+    selectedSettingCategory: 0,
     menuItems: [
       {
         name: 'Story Mode',
@@ -249,13 +250,8 @@ function gameApp() {
           break;
 
         case 'Settings':
-          this.showDialog({
-            message: 'Settings - Audio, Video, Controls, and more.',
-            buttons: [
-              { label: 'Fullscreen', action: () => { this.toggleFullscreen(); this.closeDialog(); } },
-              { label: 'Close', type: 'secondary', action: () => this.closeDialog() }
-            ]
-          });
+          this.screen = 'settings';
+          this.selectedSettingCategory = 0;
           break;
 
         case 'Quit':
