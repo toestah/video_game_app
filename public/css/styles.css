@@ -1,0 +1,578 @@
+/* ===============================================
+   GLOBAL RESET & BASE STYLES
+   =============================================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  /* 2000s Sony PlayStation color palette */
+  --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  --dark-gradient: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.1);
+
+  /* Colors */
+  --text-primary: #ffffff;
+  --text-secondary: #b8c5d6;
+  --accent-blue: #4a90e2;
+  --accent-purple: #764ba2;
+  --danger: #f5576c;
+
+  /* Spacing */
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 1rem;
+  --spacing-md: 1.5rem;
+  --spacing-lg: 2rem;
+  --spacing-xl: 3rem;
+
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
+  --glow: 0 0 20px rgba(102, 126, 234, 0.4);
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  background: var(--dark-gradient);
+  color: var(--text-primary);
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+}
+
+/* ===============================================
+   BACKGROUND EFFECTS
+   =============================================== */
+.game-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--dark-gradient);
+  z-index: -1;
+}
+
+.game-background::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
+  animation: pulse 8s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.1); }
+}
+
+/* ===============================================
+   MAIN CONTAINER
+   =============================================== */
+.game-container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.screen {
+  width: 90%;
+  max-width: 900px;
+  min-height: 500px;
+  padding: var(--spacing-xl);
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  box-shadow: var(--shadow-lg);
+  position: absolute;
+}
+
+.screen-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: var(--spacing-lg);
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 2px 10px rgba(102, 126, 234, 0.3);
+}
+
+/* ===============================================
+   STARTUP SCREEN
+   =============================================== */
+.startup-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.startup-logo {
+  animation: fadeInScale 1s ease-out;
+}
+
+.game-title {
+  font-size: 4rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-transform: uppercase;
+  margin-bottom: var(--spacing-md);
+  filter: drop-shadow(0 0 30px rgba(102, 126, 234, 0.6));
+}
+
+.press-start {
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+  animation: blink 2s ease-in-out infinite;
+  margin-top: var(--spacing-lg);
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ===============================================
+   SAVE FILE SELECTION
+   =============================================== */
+.save-select-screen {
+  display: flex;
+  flex-direction: column;
+}
+
+.save-slots {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.save-slot {
+  background: var(--glass-bg);
+  border: 2px solid var(--glass-border);
+  border-radius: 12px;
+  padding: var(--spacing-md);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  position: relative;
+  overflow: hidden;
+}
+
+.save-slot::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.5s;
+}
+
+.save-slot:hover::before {
+  left: 100%;
+}
+
+.save-slot:hover {
+  border-color: var(--accent-blue);
+  transform: translateX(10px);
+  box-shadow: var(--shadow-md), var(--glow);
+}
+
+.save-slot.selected {
+  border-color: var(--accent-purple);
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+  box-shadow: var(--shadow-md), var(--glow);
+  transform: translateX(10px);
+}
+
+.slot-number {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  min-width: 80px;
+}
+
+.save-info {
+  flex: 1;
+}
+
+.save-name {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.save-meta {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.empty-slot {
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+/* ===============================================
+   MAIN MENU
+   =============================================== */
+.main-menu-screen {
+  display: flex;
+  flex-direction: column;
+}
+
+.menu-options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.menu-option {
+  background: var(--glass-bg);
+  border: 2px solid var(--glass-border);
+  border-radius: 12px;
+  padding: var(--spacing-md);
+  font-size: 1.3rem;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  position: relative;
+  overflow: hidden;
+  font-weight: 600;
+}
+
+.menu-option::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.5s;
+}
+
+.menu-option:hover::before {
+  left: 100%;
+}
+
+.menu-option:hover,
+.menu-option.selected {
+  border-color: var(--accent-blue);
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+  transform: translateX(15px);
+  box-shadow: var(--shadow-md), var(--glow);
+}
+
+.menu-icon {
+  font-size: 1.5rem;
+  min-width: 40px;
+  text-align: center;
+}
+
+/* ===============================================
+   BUTTONS
+   =============================================== */
+.menu-buttons {
+  display: flex;
+  gap: var(--spacing-sm);
+  justify-content: center;
+  margin-top: var(--spacing-lg);
+}
+
+.game-button {
+  padding: var(--spacing-sm) var(--spacing-lg);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  background: var(--primary-gradient);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
+}
+
+.game-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.game-button:hover::before {
+  opacity: 1;
+}
+
+.game-button:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md), var(--glow);
+}
+
+.game-button:active {
+  transform: translateY(0);
+}
+
+.game-button.secondary {
+  background: var(--glass-bg);
+  border: 2px solid var(--glass-border);
+}
+
+.game-button.danger {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+/* ===============================================
+   DIALOG MODAL
+   =============================================== */
+.dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.dialog-modal {
+  background: var(--glass-bg);
+  backdrop-filter: blur(30px);
+  border: 2px solid var(--glass-border);
+  border-radius: 16px;
+  padding: var(--spacing-xl);
+  max-width: 500px;
+  width: 90%;
+  box-shadow: var(--shadow-lg);
+}
+
+.dialog-content {
+  margin-bottom: var(--spacing-lg);
+}
+
+.dialog-text {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  text-align: center;
+  color: var(--text-primary);
+}
+
+.dialog-buttons {
+  display: flex;
+  gap: var(--spacing-sm);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* Name Input */
+.name-input {
+  width: 100%;
+  padding: var(--spacing-sm);
+  margin-top: var(--spacing-md);
+  font-size: 1.1rem;
+  background: var(--glass-bg);
+  border: 2px solid var(--glass-border);
+  border-radius: 8px;
+  color: var(--text-primary);
+  text-align: center;
+  transition: all 0.3s;
+}
+
+.name-input:focus {
+  outline: none;
+  border-color: var(--accent-blue);
+  box-shadow: var(--glow);
+}
+
+.name-input::placeholder {
+  color: var(--text-secondary);
+}
+
+/* ===============================================
+   ANIMATIONS & TRANSITIONS
+   =============================================== */
+
+/* Fade transitions */
+.fade-in {
+  animation: fadeIn 0.5s ease-out;
+}
+
+.fade-out {
+  animation: fadeOut 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+/* Slide transitions */
+.slide-in {
+  animation: slideIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.slide-out {
+  animation: slideOut 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+}
+
+/* Fast fade (for dialogs) */
+.fade-in-fast {
+  animation: fadeIn 0.2s ease-out;
+}
+
+.fade-out-fast {
+  animation: fadeOut 0.2s ease-out;
+}
+
+/* Scale transitions (for dialogs) */
+.scale-in {
+  animation: scaleIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.scale-out {
+  animation: scaleOut 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes scaleOut {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+}
+
+/* ===============================================
+   RESPONSIVE DESIGN
+   =============================================== */
+@media (max-width: 768px) {
+  .game-title {
+    font-size: 2.5rem;
+  }
+
+  .screen-title {
+    font-size: 2rem;
+  }
+
+  .screen {
+    width: 95%;
+    padding: var(--spacing-md);
+  }
+
+  .menu-option {
+    font-size: 1.1rem;
+  }
+
+  .save-name {
+    font-size: 1.2rem;
+  }
+}
+
+/* ===============================================
+   SCROLLBAR STYLING (for future content)
+   =============================================== */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--glass-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary-gradient);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-purple);
+}

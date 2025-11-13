@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Game App</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body x-data="gameApp()" @keydown.window="handleKeyPress($event)">
+
+    <!-- Background -->
+    <div class="game-background"></div>
+
+    <!-- Main Container -->
+    <div class="game-container">
+
+        <!-- Startup Screen -->
+        <div x-show="screen === 'startup'"
+             x-transition:enter="fade-in"
+             x-transition:leave="fade-out"
+             class="screen startup-screen">
+            <div class="startup-logo">
+                <h1 class="game-title">ASTRO ADVENTURE</h1>
+                <p class="press-start" x-show="showPressStart">Press any key to start</p>
+            </div>
+        </div>
+
+        <!-- Save File Selection Screen -->
+        <div x-show="screen === 'save-select'"
+             x-transition:enter="slide-in"
+             x-transition:leave="slide-out"
+             class="screen save-select-screen">
+            <h2 class="screen-title">Select Save File</h2>
+            <div class="save-slots">
+                <template x-for="(save, index) in saves" :key="index">
+                    <div class="save-slot"
+                         :class="{ 'selected': selectedSlot === index, 'empty': !save.name }"
+                         @click="selectSaveSlot(index)">
+                        <div class="slot-number">Slot <span x-text="index + 1"></span></div>
+                        <template x-if="save.name">
+                            <div class="save-info">
+                                <div class="save-name" x-text="save.name"></div>
+                                <div class="save-meta">
+                                    <span x-text="save.playtime"></span> ·
+                                    <span x-text="save.date"></span>
+                                </div>
+                            </div>
+                        </template>
+                        <template x-if="!save.name">
+                            <div class="empty-slot">Empty</div>
+                        </template>
+                    </div>
+                </template>
+            </div>
+            <div class="menu-buttons">
+                <button class="game-button" @click="confirmSaveSelection()">Continue</button>
+                <button class="game-button secondary" @click="screen = 'startup'">Back</button>
+            </div>
+        </div>
+
+        <!-- Main Menu Screen -->
+        <div x-show="screen === 'main-menu'"
+             x-transition:enter="slide-in"
+             x-transition:leave="slide-out"
+             class="screen main-menu-screen">
+            <h2 class="screen-title">Main Menu</h2>
+            <div class="menu-options">
+                <button class="menu-option"
+                        :class="{ 'selected': selectedMenuIndex === 0 }"
+                        @click="selectMenu(0)"
+                        @mouseenter="selectedMenuIndex = 0">
+                    <span class="menu-icon">📖</span> Story Mode
+                </button>
+                <button class="menu-option"
+                        :class="{ 'selected': selectedMenuIndex === 1 }"
+                        @click="selectMenu(1)"
+                        @mouseenter="selectedMenuIndex = 1">
+                    <span class="menu-icon">🎯</span> Arcade Mode
+                </button>
+                <button class="menu-option"
+                        :class="{ 'selected': selectedMenuIndex === 2 }"
+                        @click="selectMenu(2)"
+                        @mouseenter="selectedMenuIndex = 2">
+                    <span class="menu-icon">🎮</span> Multiplayer
+                </button>
+                <button class="menu-option"
+                        :class="{ 'selected': selectedMenuIndex === 3 }"
+                        @click="selectMenu(3)"
+                        @mouseenter="selectedMenuIndex = 3">
+                    <span class="menu-icon">🖼️</span> Gallery
+                </button>
+                <button class="menu-option"
+                        :class="{ 'selected': selectedMenuIndex === 4 }"
+                        @click="selectMenu(4)"
+                        @mouseenter="selectedMenuIndex = 4">
+                    <span class="menu-icon">🏪</span> Credit Shop
+                </button>
+                <button class="menu-option"
+                        :class="{ 'selected': selectedMenuIndex === 5 }"
+                        @click="selectMenu(5)"
+                        @mouseenter="selectedMenuIndex = 5">
+                    <span class="menu-icon">⚙️</span> Settings
+                </button>
+                <button class="menu-option"
+                        :class="{ 'selected': selectedMenuIndex === 6 }"
+                        @click="selectMenu(6)"
+                        @mouseenter="selectedMenuIndex = 6">
+                    <span class="menu-icon">🚪</span> Quit
+                </button>
+            </div>
+        </div>
+
+        <!-- Dialog Modal -->
+        <div x-show="dialog.show"
+             x-transition:enter="fade-in-fast"
+             x-transition:leave="fade-out-fast"
+             class="dialog-overlay">
+            <div class="dialog-modal"
+                 x-transition:enter="scale-in"
+                 x-transition:leave="scale-out">
+                <div class="dialog-content">
+                    <p class="dialog-text" x-text="dialog.message"></p>
+                </div>
+                <div class="dialog-buttons">
+                    <template x-for="(button, index) in dialog.buttons" :key="index">
+                        <button class="game-button"
+                                :class="button.type || 'primary'"
+                                @click="handleDialogButton(button)">
+                            <span x-text="button.label"></span>
+                        </button>
+                    </template>
+                </div>
+            </div>
+        </div>
+
+        <!-- Name Input Modal -->
+        <div x-show="showNameInput"
+             x-transition:enter="fade-in-fast"
+             x-transition:leave="fade-out-fast"
+             class="dialog-overlay">
+            <div class="dialog-modal"
+                 x-transition:enter="scale-in"
+                 x-transition:leave="scale-out">
+                <div class="dialog-content">
+                    <p class="dialog-text">Enter a name for your save file:</p>
+                    <input type="text"
+                           x-model="newSaveName"
+                           @keydown.enter="createNewSave()"
+                           class="name-input"
+                           placeholder="Player Name"
+                           maxlength="20"
+                           autofocus>
+                </div>
+                <div class="dialog-buttons">
+                    <button class="game-button" @click="createNewSave()">Create</button>
+                    <button class="game-button secondary" @click="showNameInput = false">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="/js/storage.js"></script>
+    <script src="/js/app.js"></script>
+</body>
+</html>
