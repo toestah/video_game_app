@@ -16,14 +16,56 @@ function gameApp() {
 
     // Main menu
     selectedMenuIndex: 0,
-    menuOptions: [
-      'Story Mode',
-      'Arcade Mode',
-      'Multiplayer',
-      'Gallery',
-      'Credit Shop',
-      'Settings',
-      'Quit'
+    menuItems: [
+      {
+        name: 'Story Mode',
+        description: 'Embark on an epic journey through captivating narratives and immersive worlds. Experience rich storytelling with memorable characters and meaningful choices.',
+        meta: 'Single Player • Campaign',
+        image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=80',
+        theme: 'mountain-landscape'
+      },
+      {
+        name: 'Arcade Mode',
+        description: 'Test your skills in fast-paced challenges. Quick matches designed for intense competition and maximum excitement.',
+        meta: 'Quick Play • High Score',
+        image: 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=1200&q=80',
+        theme: 'abstract-gradient'
+      },
+      {
+        name: 'Multiplayer',
+        description: 'Connect with friends and players worldwide. Team up or compete in thrilling online matches and cooperative adventures.',
+        meta: 'Online • 1-8 Players',
+        image: 'https://images.unsplash.com/photo-1511884642898-4c92249e20b6?w=1200&q=80',
+        theme: 'cosmic-space'
+      },
+      {
+        name: 'Gallery',
+        description: 'Browse your collection of achievements, unlocked artwork, and memorable moments. Celebrate your journey and accomplishments.',
+        meta: 'Achievements • Artwork',
+        image: 'https://images.unsplash.com/photo-1545243424-0ce743321e11?w=1200&q=80',
+        theme: 'peaceful-forest'
+      },
+      {
+        name: 'Credit Shop',
+        description: 'Spend your hard-earned credits on exclusive items, cosmetics, and power-ups. Customize your experience and unlock special content.',
+        meta: 'Items • Cosmetics • Upgrades',
+        image: 'https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=1200&q=80',
+        theme: 'glowing-lights'
+      },
+      {
+        name: 'Settings',
+        description: 'Customize your experience with audio, video, and control options. Fine-tune performance and accessibility settings.',
+        meta: 'Audio • Video • Controls',
+        image: 'https://images.unsplash.com/photo-1557682250-33bd709cbe85?w=1200&q=80',
+        theme: 'geometric-gradient'
+      },
+      {
+        name: 'Quit',
+        description: 'Exit the game and return to the main system. Your progress is automatically saved.',
+        meta: 'Exit Game',
+        image: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1200&q=80',
+        theme: 'sunset-sky'
+      }
     ],
 
     // Dialog system
@@ -77,7 +119,7 @@ function gameApp() {
           this.selectedMenuIndex = Math.max(0, this.selectedMenuIndex - 1);
         } else if (event.key === 'ArrowDown') {
           event.preventDefault();
-          this.selectedMenuIndex = Math.min(this.menuOptions.length - 1, this.selectedMenuIndex + 1);
+          this.selectedMenuIndex = Math.min(this.menuItems.length - 1, this.selectedMenuIndex + 1);
         } else if (event.key === 'Enter') {
           this.selectMenu(this.selectedMenuIndex);
         }
@@ -168,7 +210,7 @@ function gameApp() {
     // Main menu selection
     selectMenu(index) {
       this.selectedMenuIndex = index;
-      const option = this.menuOptions[index];
+      const option = this.menuItems[index].name;
 
       switch(option) {
         case 'Story Mode':
@@ -226,6 +268,11 @@ function gameApp() {
           });
           break;
       }
+    },
+
+    // Get current menu background image
+    getCurrentMenuImage() {
+      return this.menuItems[this.selectedMenuIndex]?.image || '';
     },
 
     // Dialog system

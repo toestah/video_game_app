@@ -21,7 +21,7 @@
              x-transition:leave="fade-out"
              class="screen startup-screen">
             <div class="startup-logo">
-                <h1 class="game-title">ASTRO ADVENTURE</h1>
+                <h1 class="game-title">Business Operating System</h1>
                 <p class="press-start" x-show="showPressStart">Press any key to start</p>
             </div>
         </div>
@@ -31,7 +31,7 @@
              x-transition:enter="slide-in"
              x-transition:leave="slide-out"
              class="screen save-select-screen">
-            <h2 class="screen-title">Select Save File</h2>
+            <h2 class="screen-title">Select User Account</h2>
             <div class="save-slots">
                 <template x-for="(save, index) in saves" :key="index">
                     <div class="save-slot"
@@ -64,50 +64,40 @@
              x-transition:enter="slide-in"
              x-transition:leave="slide-out"
              class="screen main-menu-screen">
-            <h2 class="screen-title">Main Menu</h2>
-            <div class="menu-options">
-                <button class="menu-option"
-                        :class="{ 'selected': selectedMenuIndex === 0 }"
-                        @click="selectMenu(0)"
-                        @mouseenter="selectedMenuIndex = 0">
-                    <span class="menu-icon">📖</span> Story Mode
-                </button>
-                <button class="menu-option"
-                        :class="{ 'selected': selectedMenuIndex === 1 }"
-                        @click="selectMenu(1)"
-                        @mouseenter="selectedMenuIndex = 1">
-                    <span class="menu-icon">🎯</span> Arcade Mode
-                </button>
-                <button class="menu-option"
-                        :class="{ 'selected': selectedMenuIndex === 2 }"
-                        @click="selectMenu(2)"
-                        @mouseenter="selectedMenuIndex = 2">
-                    <span class="menu-icon">🎮</span> Multiplayer
-                </button>
-                <button class="menu-option"
-                        :class="{ 'selected': selectedMenuIndex === 3 }"
-                        @click="selectMenu(3)"
-                        @mouseenter="selectedMenuIndex = 3">
-                    <span class="menu-icon">🖼️</span> Gallery
-                </button>
-                <button class="menu-option"
-                        :class="{ 'selected': selectedMenuIndex === 4 }"
-                        @click="selectMenu(4)"
-                        @mouseenter="selectedMenuIndex = 4">
-                    <span class="menu-icon">🏪</span> Credit Shop
-                </button>
-                <button class="menu-option"
-                        :class="{ 'selected': selectedMenuIndex === 5 }"
-                        @click="selectMenu(5)"
-                        @mouseenter="selectedMenuIndex = 5">
-                    <span class="menu-icon">⚙️</span> Settings
-                </button>
-                <button class="menu-option"
-                        :class="{ 'selected': selectedMenuIndex === 6 }"
-                        @click="selectMenu(6)"
-                        @mouseenter="selectedMenuIndex = 6">
-                    <span class="menu-icon">🚪</span> Quit
-                </button>
+
+            <!-- Background Image -->
+            <div class="menu-background"
+                 :style="`background-image: url('${getCurrentMenuImage()}')`"></div>
+
+            <!-- Menu Content Container -->
+            <div class="menu-container">
+
+                <!-- Left Panel: Menu Options -->
+                <div class="menu-left-panel">
+                    <h2 class="menu-title">SELECT MODE</h2>
+                    <div class="menu-options">
+                        <template x-for="(option, index) in menuItems" :key="index">
+                            <button class="menu-option"
+                                    :class="{ 'selected': selectedMenuIndex === index }"
+                                    @click="selectMenu(index)"
+                                    @mouseenter="selectedMenuIndex = index">
+                                <span class="menu-label" x-text="option.name"></span>
+                            </button>
+                        </template>
+                    </div>
+                </div>
+
+                <!-- Right Panel: Details -->
+                <div class="menu-right-panel">
+                    <div class="detail-card">
+                        <h3 class="detail-title" x-text="menuItems[selectedMenuIndex].name"></h3>
+                        <p class="detail-description" x-text="menuItems[selectedMenuIndex].description"></p>
+                        <div class="detail-meta">
+                            <span class="meta-item" x-text="menuItems[selectedMenuIndex].meta"></span>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
 
