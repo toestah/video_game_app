@@ -19,10 +19,11 @@
         <div x-show="screen === 'startup'"
              x-transition:enter="fade-in"
              x-transition:leave="fade-out"
-             class="screen startup-screen">
+             class="screen startup-screen"
+             @click="if (showPressStart) screen = 'save-select'">
             <div class="startup-logo">
                 <h1 class="game-title">Business Operating System</h1>
-                <p class="press-start" x-show="showPressStart">Press any key to start</p>
+                <p class="press-start" x-show="showPressStart">Click or press any key to start</p>
             </div>
         </div>
 
